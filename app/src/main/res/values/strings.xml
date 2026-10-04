@@ -1,3 +1,19 @@
 <resources>
-    <string name="app_name">mobile znu</string>
+    <string name="app_name">BookTracker</string>
+
+    <string name="books_title">Мої книги</string>
+    <string name="add_book_title">Додати книгу</string>
+
+    <string name="book_title">Назва</string>
+    <string name="book_author">Автор</string>
+    <string name="book_description">Опис</string>
+
+    <string name="book_is_read">Прочитано</string>
+    <string name="status_read">Прочитано</string>
+    <string name="status_not_read">Не прочитано</string>
+
+    <string name="save">Зберегти</string>
+    <string name="cancel">Скасувати</string>
+
+    <string name="empty_books">Книг поки немає</string>
 </resources>
