@@ -5,7 +5,7 @@ data class Book (
     val title: String,
     val author: String,
     val description: String?,
-    var isRead: Boolean
+    val isRead: Boolean
 )
 
 

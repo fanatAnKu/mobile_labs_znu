@@ -16,4 +16,11 @@
     <string name="cancel">Скасувати</string>
 
     <string name="empty_books">Книг поки немає</string>
+
+    <!-- Додано для Лабораторної роботи №3 -->
+    <string name="book_not_found">Книгу не знайдено</string>
+    <string name="back">Назад</string>
+    <string name="mark_unread">Позначити непрочитаною</string>
+    <string name="mark_read">Позначити прочитаною</string>
+    <string name="clear_form">Очистити форму</string>
 </resources>
