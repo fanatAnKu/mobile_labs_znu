@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -21,20 +22,45 @@ import kotlinx.coroutines.launch
 
 class BookViewModel(private val repository: BookRepository) : ViewModel(){
 
-    val uiState: StateFlow<BookListUiState> =
-        repository
-            .observeBooks()
-            .map { books ->
 
-                BookListUiState(
-                    books = books
-                )
+    private data class RefreshUiState(
+        val isLoading: Boolean = false,
+        val errorMessage: String? = null
+    )
+
+    private val _refreshState = MutableStateFlow(value = RefreshUiState())
+
+    val uiState: StateFlow<BookListUiState> = combine(
+        flow = repository.observeBooks(),
+        flow2 = _refreshState
+    ) { books, refreshState ->
+        BookListUiState(
+            books = books,
+            isLoading = refreshState.isLoading,
+            errorMessage = refreshState.errorMessage
+        )
+    }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
+            initialValue = BookListUiState()
+        )
+
+    fun refreshBooks() {
+        viewModelScope.launch {
+            _refreshState.update { it.copy(isLoading = true, errorMessage = null) }
+
+            try {
+                val result = repository.refreshBooks()
+
+                if (!result.isSuccess) {
+                    _refreshState.update { it.copy(errorMessage = result.errorMessage) }
+                }
+            } finally {
+                _refreshState.update { it.copy(isLoading = false) }
             }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
-                initialValue = BookListUiState()
-            )
+        }
+    }
 
     fun addBook(
         title: String,
