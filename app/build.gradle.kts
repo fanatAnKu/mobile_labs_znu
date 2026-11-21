@@ -53,6 +53,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlinx.serialization)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
     ksp(libs.androidx.room3.compiler)
     implementation(libs.androidx.sqlite.framework)
     testImplementation(libs.junit)
